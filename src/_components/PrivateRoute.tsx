@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
-import { Route, Redirect, RouteProps, RouteComponentProps } from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
 
 interface Props extends RouteProps {}
 
-const PrivateRoute: React.FC<Props> = ({ location, ...rest }) => {
+const PrivateRoute: React.FC<Props> = ({ ...rest }) => {
+  debugger
   return (
     <Route
       {...rest}
-      render={(props: RouteComponentProps) => {
-        if (!localStorage.getItem('user')) {
-          return <Redirect to={{ pathname: 'login', state: { from: location } }} />
-        }
-        return <Component {...props} />
-      }}
+      render={props => (localStorage.getItem('user') === null ? <Redirect to="/login" /> : <Component {...props} />)}
     />
   )
 }

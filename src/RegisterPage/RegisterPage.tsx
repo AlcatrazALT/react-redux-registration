@@ -1,5 +1,7 @@
 import React from 'react'
 
-export const RegisterPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   return <div>register</div>
 }
+
+export { RegisterPage }
