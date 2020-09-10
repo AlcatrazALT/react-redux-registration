@@ -22,10 +22,20 @@ export const LoginPage: React.FC = () => {
     setInputs(inputs => ({ ...inputs, [name]: value }))
   }
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    setSubmitted(true)
+    if (username && password) {
+      //const { from } = location.state || { from: { pathname: '/' } }
+      //dispatch(userActions.login(username, password, from))
+    }
+  }
+
   return (
     <div className="col-lg-8 offset-lg-2">
       <h2>Login</h2>
-      <form name="form">
+      <form name="form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Username</label>
           <input
