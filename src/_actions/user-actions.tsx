@@ -1,13 +1,23 @@
-import { userConstants } from '../_constants'
+import { userConstants } from '../_types'
 import { userService } from '../_services'
 import { alertActions } from './alert-actions'
 import { history } from '../_helpers'
+import { createEmptyAction, createAction } from './create-actions'
 
-const login = (username: string, password: string, from: string) => {
-  //action creators
-  const request = user => {
-    return { type: userConstants.LOGIN_REQUEST, user }
+interface LoginRequest {
+  username: string
+  password: string
+}
+
+const login = (username: string, password: string, from: string) => async dispatch => {
+  const request: LoginRequest = {
+    username: username,
+    password: password,
   }
+
+  //action creators
+  const loginRequestAction = createAction<LoginRequest>(userConstants.LOGIN_REQUEST)
+
   const success = user => {
     return { type: userConstants.LOGIN_SUCCESS, user }
   }
@@ -15,19 +25,16 @@ const login = (username: string, password: string, from: string) => {
     return { type: userConstants.LOGIN_FAILURE, error }
   }
 
-  return dispatch => {
-    dispatch(request({ username }))
-    userService.login(username, password).then(
-      user => {
-        dispatch(success(user))
-        history.push(from)
-      },
-      error => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      },
-    )
-  }
+  dispatch(loginRequestAction(request))
+  await userService.login(username, password).then(
+    user => {
+      dispatch(success(user))
+      history.push(from)
+    },
+    error => {
+      dispatch(failure(error))
+      dispatch(alertActions.error(error))
+    },
 }
 
 const logout = () => {

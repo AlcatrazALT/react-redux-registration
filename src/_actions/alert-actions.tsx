@@ -1,4 +1,4 @@
-import { alertConstants } from '../_constants'
+import { alertConstants } from '../_types'
 
 const success = (message: string) => {
   return { type: alertConstants.SUCCESS, message }

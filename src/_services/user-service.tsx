@@ -23,17 +23,9 @@ const handleResponse = async (response: Response) => {
   return data
 }
 
-const login = async (username: string, password: string) => {
-  const requestOptions: RequestInit = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
-  }
-
-  const response = await fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
-  const user = await handleResponse(response)
-  localStorage.setItem('user', JSON.stringify(user))
-  return user
+interface Info {
+  username: string
+  password: string
 }
 
 const getAll = async () => {
@@ -87,7 +79,18 @@ const _delete = async (id: string) => {
 }
 
 export const userService = {
-  login,
+  async login(username: string, password: string): Promise<Info> {
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    }
+
+    const response = await fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+    const user = await handleResponse(response)
+    localStorage.setItem('user', JSON.stringify(user))
+    return user
+  },
   logout,
   register,
   getAll,
